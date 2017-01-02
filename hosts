@@ -1,0 +1,26 @@
+ubuntu01 ansible_ssh_host=10.0.3.11
+ubuntu02 ansible_ssh_host=10.0.3.12
+ubuntu03 ansible_ssh_host=10.0.3.13
+
+centos01 ansible_ssh_host=10.0.3.21
+centos02 ansible_ssh_host=10.0.3.22
+centos03 ansible_ssh_host=10.0.3.23
+
+[ubuntu]
+ubuntu[01:03]
+
+[centos]
+centos[01:03]
+
+[all:vars]
+ansible_ssh_port=22
+
+[ubuntu:vars]
+ansible_user=ubuntu
+ansible_python_interpreter=/usr/bin/python2.7
+ansible_ssh_private_key=~/.ssh/id_rsa
+ansible_sudo_pass=ubuntu
+
+[centos:vars]
+ansible_user=root
+ansible_password=password

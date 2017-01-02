@@ -1,0 +1,24 @@
+- name: destroy containers
+  hosts: localhost
+  vars_files:
+    - vars-containers.yml
+
+  tasks:
+    - name: destroy containers
+      lxc_container:
+        name: "{{ item.name }}"
+        state: absent
+      with_items: "{{ containers }}"
+      become: true
+
+    - name: delete hosts from known_hosts
+      shell: "ssh-keygen -f ~/.ssh/known_hosts -R {{ item.ip_addr }}"
+      with_items: "{{ containers }}"
+
+    - name: delete hosts from /etc/hosts
+      lineinfile: 
+        dest: /etc/hosts
+        line: "{{ item.ip_addr }}   {{ hostname_prefix }}{{ item.name }}"
+        state: absent
+      with_items: "{{ containers }}"
+      become: true

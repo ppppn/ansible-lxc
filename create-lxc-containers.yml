@@ -1,0 +1,37 @@
+- name: create LXC containers
+  hosts: localhost
+  vars_files:
+    - vars-containers.yml
+
+  tasks:
+    - name: lxc-create
+      become: true
+      become_method: sudo
+      lxc_container:
+        name: "{{ item.name }}"
+        template: "{{ item.template }}"
+        container_config:
+          - "lxc.network.ipv4={{ item.ip_addr }}/{{ item.netmask_bit }}"
+        template_options: "{{ item.template_options }}"
+      environment: "{{ item.env }}"
+      with_items: "{{ containers }}"
+
+    - name: delete ssh host keys from known_hosts
+      shell: "ssh-keygen -f ~/.ssh/known_hosts -R {{ item.ip_addr }}"
+      with_items: "{{ containers }}"
+
+    - name: register ssh host keys to known_hosts (ip addr)
+      shell: "ssh-keyscan -H {{ item.ip_addr }} >> ~/.ssh/known_hosts"
+      with_items: "{{ containers }}"
+ 
+    - name: register ssh host keys to known_hosts (hostname)
+      shell: "ssh-keyscan -H {{ hostname_prefix}}{{ item.name }} >> ~/.ssh/known_hosts"
+      with_items: "{{ containers }}"
+ 
+    - name: register hosts to /etc/hosts
+      lineinfile: 
+        dest: /etc/hosts
+        line: "{{ item.ip_addr }}   {{ hostname_prefix }}{{ item.name }}"
+        state: present
+      with_items: "{{ containers }}"
+      become: true

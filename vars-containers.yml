@@ -1,0 +1,48 @@
+- containers:
+  - name: ubuntu01
+    template: ubuntu
+    ip_addr: 10.0.3.11
+    netmask_bit: 24
+    template_options: "-S /home/popo/.ssh/id_rsa.pub --packages python2.7"
+    env: {}
+
+# - name: ubuntu02
+#   template: ubuntu
+#   ip_addr: 10.0.3.12
+#   netmask_bit: 24
+#   template_options: "-S /home/popo/.ssh/id_rsa.pub --packages python2.7"
+#   env: {}
+# - name: ubuntu03
+#   template: ubuntu
+#   ip_addr: 10.0.3.13
+#   netmask_bit: 24
+#   template_options: "-S /home/popo/.ssh/id_rsa.pub --packages python2.7"
+#   env: {}
+# - name: centos01
+#   template: centos
+#   ip_addr: 10.0.3.21
+#   netmask_bit: 24
+#   template_options: "-R 7"
+#   env:
+#     root_password: "password"
+#     root_expire_password: "no"
+#
+# - name: centos02
+#   template: centos
+#   ip_addr: 10.0.3.22
+#   netmask_bit: 24
+#   template_options: "-R 7"
+#   env:
+#     root_password: "password"
+#     root_expire_password: "no"
+#
+# - name: centos03
+#   template: centos
+#   ip_addr: 10.0.3.23
+#   netmask_bit: 24
+#   template_options: "-R 7"
+#   env:
+#     root_password: "password"
+#     root_expire_password: "no"
+
+- hostname_prefix: "lxc-"
